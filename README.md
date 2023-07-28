@@ -1,4 +1,4 @@
-#🥷 Mmry
+# 🥷 Mmry
 
 A simple, lightweight, and easy-to-use memory cache library for TypeScript/JavaScript.
 
