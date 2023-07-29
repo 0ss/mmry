@@ -22,7 +22,7 @@ import Mmry from 'mmry';
 const cache = new Mmry<string>();
 
 // Add a value to the cache with a TTL of 5 minutes
-cache.put('myKey', 'myValue', '5 minutes');
+cache.put('myKey', 'myValue', '5 minutes'); // you can use `seconds`, `hours` and `days` as well
 
 // Retrieve a value from the cache
 const value = cache.get('myKey');
