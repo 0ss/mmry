@@ -28,12 +28,73 @@ describe('Mmry', () => {
     expect(result).toBeUndefined();
   });
 
-  it('should expire a cached value after the specified TTL', () => {
+  it('should expire a cached value after the specified TTL (seconds)', () => {
     jest.useFakeTimers();
     cache.put('key', 'value', '1 seconds');
     jest.advanceTimersByTime(1000);
     const result = cache.get('key');
     expect(result).toBeUndefined();
+  });
+  it('should work with second/s minute/s hour/s day/s', () => {
+    cache.put('key', 'value', '1 second');
+    cache.put('key', 'value', '1 seconds');
+    cache.put('key', 'value', '1 minute');
+    cache.put('key', 'value', '1 minutes');
+    cache.put('key', 'value', '1 hour');
+    cache.put('key', 'value', '1 hours');
+    cache.put('key', 'value', '1 day');
+    cache.put('key', 'value', '1 days');
+  });
+
+  it('should fail to expire a cached value after the specified TTL (seconds)', () => {
+    jest.useFakeTimers();
+    cache.put('key', 'value', '1 seconds');
+    jest.advanceTimersByTime(999);
+    const result = cache.get('key');
+    expect(result).toBe('value');
+  });
+  it('should expire a cached value after the specified TTL (minutes)', () => {
+    jest.useFakeTimers();
+    cache.put('key', 'value', '1 minutes');
+    jest.advanceTimersByTime(60000);
+    const result = cache.get('key');
+    expect(result).toBeUndefined();
+  });
+  it('should fail to expire a cached value after the specified TTL (minutes)', () => {
+    jest.useFakeTimers();
+    cache.put('key', 'value', '1 minutes');
+    jest.advanceTimersByTime(59999);
+    const result = cache.get('key');
+    expect(result).toBe('value');
+  });
+  it('should expire a cached value after the specified TTL (hours)', () => {
+    jest.useFakeTimers();
+    cache.put('key', 'value', '1 hours');
+    jest.advanceTimersByTime(3600000);
+    const result = cache.get('key');
+    expect(result).toBeUndefined();
+  });
+  it('should fail to expire a cached value after the specified TTL (hours)', () => {
+    jest.useFakeTimers();
+    cache.put('key', 'value', '1 hours');
+    jest.advanceTimersByTime(3599999);
+    const result = cache.get('key');
+    expect(result).toBe('value');
+  });
+
+  it('should expire a cached value after the specified TTL (days)', () => {
+    jest.useFakeTimers();
+    cache.put('key', 'value', '1 days');
+    jest.advanceTimersByTime(86400000);
+    const result = cache.get('key');
+    expect(result).toBeUndefined();
+  });
+  it('should fail to expire a cached value after the specified TTL (days)', () => {
+    jest.useFakeTimers();
+    cache.put('key', 'value', '1 days');
+    jest.advanceTimersByTime(86399999);
+    const result = cache.get('key');
+    expect(result).toBe('value');
   });
 
   it('should not expire a cached value before the TTL', () => {
