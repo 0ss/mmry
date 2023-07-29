@@ -83,9 +83,17 @@ class Mmry<T> {
 
     switch (unit.toLowerCase()) {
       case 'seconds':
+      case 'second':
         return ttl * 1000;
       case 'minutes':
+      case 'minute':
         return ttl * 1000 * 60;
+      case 'hours':
+      case 'hour':
+        return ttl * 1000 * 60 * 60;
+      case 'days':
+      case 'day':
+        return ttl * 1000 * 60 * 60 * 24;
       default:
         throw new Error('Invalid TTL unit');
     }
