@@ -15,6 +15,7 @@ yarn add mmry
 ```
 
 ## Usage
+
 ```ts
 import Mmry from 'mmry';
 
@@ -22,7 +23,7 @@ import Mmry from 'mmry';
 const cache = new Mmry<string>();
 
 // Add a value to the cache with a TTL of 5 minutes
-cache.put('myKey', 'myValue', '5 minutes');
+cache.put('myKey', 'myValue', '5 minutes'); // you can use `seconds`, `hours` and `days` as well
 
 // Retrieve a value from the cache
 const value = cache.get('myKey');
@@ -36,9 +37,11 @@ const allItems = cache.getAll();
 // Remove all values from the cache
 cache.clearAll();
 ```
+
 ## Real-world example
 
 Here's an example of how you could use Mmry with the [Express](https://expressjs.com/) web framework:
+
 ```ts
 import express, { Request, Response } from 'express';
 import Mmry from 'mmry';
@@ -89,4 +92,3 @@ app.listen(3000, () => {
   console.log('Server is running on port 3000');
 });
 ```
-
