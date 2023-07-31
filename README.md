@@ -30,6 +30,10 @@ const value = cache.get('myKey');
 // Remove a value from the cache
 cache.del('myKey');
 
+// cache a function
+const sum = (...nums: number[]) => nums.reduce((total, curr) => total + curr, 0);
+const result = cache.cacheFunction('sum', sum, [1, 2, 3]); // 6 (cached)
+
 // Retrieve all key-value pairs from the cache
 const allItems = cache.getAll();
 
