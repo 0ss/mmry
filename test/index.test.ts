@@ -133,4 +133,19 @@ describe('Mmry', () => {
     const result = cache.getAll();
     expect(result).toEqual({ key1: 'value1', key2: 'value2' });
   });
+
+  it('should set a function to be cached and return its return value', () => {
+    const sum = (...nums: number[]) => nums.reduce((total, curr) => total + curr, 0);
+    let result = cache.cacheFunction('sum', sum, [1, 2, 3]);
+    expect(result).toBe(6);
+    result = cache.cacheFunction('sum', sum, [3, 4, 5]);
+    expect(result).toBe(12);
+  });
+
+  it('Make sure that the function is caching the function and not duplicating', () => {
+    const test = (firstName: string, lastName: string) => ({firstName, lastName});
+    let result1 = cache.cacheFunction('test', test, ['foo', 'bar']);
+    let result2 = cache.cacheFunction('test', test, ['foo', 'bar']);
+    expect(result1).toBe(result2);
+  });
 });
