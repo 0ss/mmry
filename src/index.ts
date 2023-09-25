@@ -5,7 +5,42 @@ type CacheItemOptions<T> = {
 
 class Mmry<T> {
   private cache: Map<string, CacheItemOptions<T>> = new Map();
+  private hits: number = 0;
+  private misses: number = 0;
+  /**
+   * Retrieves the cache statistics.
+   * @returns An object containing cache statistics (hits, misses, and size).
+   */
+  public getStats(): { hits: number; misses: number; size: number } {
+    return {
+      hits: this.hits,
+      misses: this.misses,
+      size: this.cache.size,
+    };
+  }
+  /**
+   * Retrieves the cache hit rate (hits / (hits + misses)).
+   * @returns The cache hit rate as a percentage (0-100).
+   */
+  public getHitRate(): number {
+    const totalRequests = this.hits + this.misses;
+    if (totalRequests === 0) {
+      return 0;
+    }
+    return (this.hits / totalRequests) * 100;
+  }
 
+  /**
+   * Retrieves the cache miss rate (misses / (hits + misses)).
+   * @returns The cache miss rate as a percentage (0-100).
+   */
+  public getMissRate(): number {
+    const totalRequests = this.hits + this.misses;
+    if (totalRequests === 0) {
+      return 0;
+    }
+    return (this.misses / totalRequests) * 100;
+  }
   /**
    * Adds a value to the cache with a specified TTL.
    * @param key The key associated with the value.
@@ -37,7 +72,13 @@ class Mmry<T> {
    */
   public get(key: string): T | undefined {
     const cacheItem = this.cache.get(key);
-    return cacheItem?.value;
+    if (cacheItem) {
+      this.hits++;
+      return cacheItem.value;
+    } else {
+      this.misses++;
+      return undefined;
+    }
   }
 
   /**

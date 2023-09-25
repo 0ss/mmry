@@ -133,4 +133,39 @@ describe('Mmry', () => {
     const result = cache.getAll();
     expect(result).toEqual({ key1: 'value1', key2: 'value2' });
   });
+
+  it('should track cache hits and misses', () => {
+    cache.put('key1', 'value1');
+    const result1 = cache.get('key1'); // This is a cache hit
+    const result2 = cache.get('key2'); // This is a cache miss
+    const stats = cache.getStats();
+
+    expect(stats.hits).toBe(1);
+    expect(stats.misses).toBe(1);
+    expect(result1).toBe('value1');
+    expect(result2).toBeUndefined();
+  });
+
+  it('should calculate cache hit rate and miss rate correctly', () => {
+    cache.put('key1', 'value1');
+    const result1 = cache.get('key1'); // Cache hit
+    const result2 = cache.get('key3'); // Cache miss
+
+    // Cache hit rate: (1 hit / 2 total requests) * 100 = 50%
+    expect(cache.getHitRate()).toBe(50);
+    // Cache miss rate: (1 miss / 2 total requests) * 100 = 50%
+    expect(cache.getMissRate()).toBe(50);
+    expect(result1).toBe('value1');
+    expect(result2).toBeUndefined();
+  });
+
+  it('should expose cache statistics', () => {
+    cache.put('key1', 'value1');
+    cache.put('key2', 'value2');
+    const stats = cache.getStats();
+
+    expect(stats.hits).toBe(0); // No hits yet
+    expect(stats.misses).toBe(0); // No misses yet
+    expect(stats.size).toBe(2); // Two items in the cache
+  });
 });
